@@ -21,7 +21,7 @@
 - Java
 - Spring Boot
 - MongoDB
-- [UI Repository](https://github.com/subishsubash/ecommerce-backend)
+- [Backend Repository](https://github.com/subishsubash/ecommerce-backend)
 ----
 
  
