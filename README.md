@@ -13,6 +13,19 @@
   - The backend API are exposed to consume and have with any other frontend UI.
   
 ----
+<h2>API Exposed from Ecommerce Microservice</h2>
+
+| Method | Operation Id | URL | Description |  
+|:-----------|:-----------|:-----------|:-----------|
+| POST | createUser | /barclays/user | Create a user |  
+| GET | logIn | /barclays/logIn/{emailId} | Validate user emailId for log in |
+| GET | getProduct | /barclays/product/{productId} | Fetch the products from product table.</br>API Will return all the products by passing All in param |  
+| POST | addProductInCart | /barclays/cart | Add the product to cart, userId and productId should pass in request body |
+| GET | getProductFromCart | barclays/cart/all/{userId} | Fetch products from the cart for particular userId |  
+| POST | createOrder | /barclays/payment | API helps to make payment and create a record in order table |
+| DELETE | removeProductFromCart | /barclays/cart/{productId}/{userId} | Delete a product from cart based on userId and productId |  
+
+----
 <h2>Languages & Frameworks</h2> 
 
 1. FrontEnd
