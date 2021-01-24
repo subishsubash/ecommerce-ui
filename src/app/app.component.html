@@ -1,0 +1,186 @@
+<div class="row justify-content-md-center">
+    <div class="col-md-10">
+        <!-- Nav bar -->
+        <div class="row" color="gray">
+            <div class="col-md-3">
+                <a><img class="logo" src="/assets/logo.png" (click)="ngOnInit()"></a>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Search...</mat-label>
+                    <input matInput type="text" [(ngModel)]="searchItem" (keypress)="searchEvent()">
+                    <button mat-button *ngIf="searchItem" matSuffix mat-icon-button aria-label="Clear"
+                        (click)="ngOnInit()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+            <div class="col-md-1">
+                <button mat-button (click)=getLogIn()>LogIn</button>
+            </div>
+            <div class="col-md-1">
+                <button mat-button (click)=cartList()>Cart</button>
+            </div>
+        </div>
+        <div class="row" *ngIf="isNonPayment">
+            <div class="col-md-4">
+                <H5>Rating</H5>
+                <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                    <mat-button-toggle (click)="toggleLow()">Low to High</mat-button-toggle>
+                    <mat-button-toggle (click)="toggleHigh()">High to Low</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row justify-content-md-center" *ngIf="isNonPayment">
+    <div class="col-md-10">
+        <!-- products cards-->
+        <div class="row justify-content-md-center title-gap">
+            <div class="col-md-3" *ngFor="let card of obs | async; let i = index">
+                <mat-card class="example-card">
+                    <mat-card-header>
+                        <mat-card-title>{{card.title}}</mat-card-title>
+                        <mat-card-subtitle>{{card.authors}}</mat-card-subtitle>
+                    </mat-card-header>
+                    <img mat-card-image src={{ImageURL[i%10].Image}} />
+
+                    <mat-card-content>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Price</h6>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Rs. {{card.price}}</h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Rating</h6>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>{{card.average_rating}}</h6>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions class="row">
+                        <button class="col-md-6" mat-button (click)="payment(i)">Buy</button>
+                        <button class="col-md-6" mat-button *ngIf="!isCart" (click)="addToCart(i)">Add To Cart</button>
+                        <button class="col-md-6" mat-button *ngIf="isCart" (click)="removeFromCart(i)">Remove</button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+        <!-- Paginator-->
+        <div class="row justify-content-md-center title-gap">
+            <mat-paginator class="head-label-text-pagination" [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-md-center" *ngIf="isPayment">
+    
+    <div class="col-md-3">
+        <mat-card class="example-card">
+            <mat-card-header>
+                <mat-card-title>{{product.title}}</mat-card-title>
+                <mat-card-subtitle>{{product.authors}}</mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image src={{ImageURL[8].Image}} />
+            <mat-card-content>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Price</h6>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Rs. {{product.price}}</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Rating</h6>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>{{product.average_rating}}</h6>
+                    </div>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-button *ngIf="!isCart" (click)="addToCartFromPaymentPage(product)">Add To Cart</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <div class="col-md-4">
+        <p>
+            <mat-form-field appearance="legacy" class = "example-full-width">
+                <mat-label>User Name</mat-label>
+                <input matInput placeholder="Name" [(ngModel)]="userName">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy"  class = "example-full-width">
+                <mat-label>Phone Number</mat-label>
+                <input matInput placeholder="Phone Number" [(ngModel)]="phoneNumber">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy"  class = "example-full-width">
+                <mat-label>Email Id</mat-label>
+                <input matInput placeholder="Email Id" [(ngModel)]="emailId">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy"  class = "example-full-width">
+                <mat-label>Product</mat-label>
+                <input matInput value={{product.title}} disabled>
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy"  class = "example-full-width">
+                <mat-label>Price</mat-label>
+                <input matInput value={{product.price}} disabled>
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy"  class = "example-full-width">
+                <mat-label>Delivery Address</mat-label>
+                <input matInput placeholder="Address" [(ngModel)]="address">
+            </mat-form-field>
+        </p>
+        <button mat-button (click)="orderProduct(product)">Make Payment</button>
+    </div>
+</div>
+<div class="row justify-content-md-center" *ngIf="isInPaymentStatus">
+    <div></div>
+    <h1>{{paymentStatus}}</h1>
+
+</div>
+
+<div class="row justify-content-md-center" *ngIf="isInLogin">
+    <p>
+        <mat-form-field appearance="legacy" class = "example-full-width">
+            <mat-label>User Name</mat-label>
+            <input matInput placeholder="Name" [(ngModel)]="userName">
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field appearance="legacy"  class = "example-full-width">
+            <mat-label>Phone Number</mat-label>
+            <input matInput placeholder="Phone Number" [(ngModel)]="phoneNumber">
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field appearance="legacy"  class = "example-full-width">
+            <mat-label>Email Id</mat-label>
+            <input matInput placeholder="Email Id" [(ngModel)]="emailId">
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field appearance="legacy"  class = "example-full-width">
+            <mat-label>Delivery Address</mat-label>
+            <input matInput placeholder="Address" [(ngModel)]="address">
+        </mat-form-field>
+    </p>
+    <button mat-button (click)="orderProduct(product)">Make Payment</button>
+</div>
+</div>
