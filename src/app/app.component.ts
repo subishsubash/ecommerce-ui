@@ -78,7 +78,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   phoneNumber = "";
-  userName = "NoUser";
+  userName = "";
   emailId = "";
   address = "";
   postResults = ""
@@ -194,7 +194,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isInLogin = false;
     this.isInPaymentStatus = false;
     this.isCart = true;
-    let url = "http://localhost:8080/barclays/cart/all/"+this.userName;
+    if(this.userName == "") {
+      this.loggedUser = "NoUser";
+    }
+    let url = "http://localhost:8080/barclays/cart/all/"+this.loggedUser;
     let obsProductDetails = this.http.get(url);
     obsProductDetails.toPromise().then(data => {
       console.log(data["products"]);
@@ -221,7 +224,7 @@ export class AppComponent implements OnInit, OnDestroy {
       'Access-Control-Allow-Credentials': 'true'
     };
      // TODO : proper user name should be sent
-    const body = { 'productId': this.product["bookID"], 'userId': this.userName };
+    const body = { 'productId': this.product["bookID"], 'userId': this.loggedUser };
 
     this.http.post<any>(url, body, { 'headers': headers }).subscribe(data => {
       console.log(data);
@@ -264,7 +267,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public removeFromCart(index) {
     this.product = this.prodTemp[index];
     // TODO : proper user name should be sent
-    let url = "http://localhost:8080/barclays/cart/"+this.product["bookID"]+"/"+this.userName;
+    let url = "http://localhost:8080/barclays/cart/"+this.product["bookID"]+"/"+this.loggedUser;
     
     let obsProductDetails = this.http.delete(url);
     obsProductDetails.toPromise().then(data => {
@@ -279,7 +282,29 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isCart = false;
     this.isNonPayment = false;
     this.isPayment = false;
-   
+  }
+
+  isLoggedIn = false;
+  loggedUser="NoUser";
+
+  public logIn() {
+    let url = "http://localhost:8080/barclays/logIn/"+this.emailId;
+    let obsProductDetails = this.http.get(url);
+    obsProductDetails.toPromise().then(data => {
+      console.log(data);
+      if(data["success"] == true) {
+        alert("Login Successful");
+        this.isLoggedIn = true;
+        this.loggedUser = this.userName;
+        console.log(this.loggedUser);
+      } else {
+        this.emailId =""
+        this.phoneNumber = ""
+        this.userName = ""
+        alert("Invalid User");
+      }
+      this.ngOnInit();
+    });
   }
 
   ImageURL = [];
